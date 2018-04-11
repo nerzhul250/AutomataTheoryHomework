@@ -272,12 +272,12 @@ public class AutomataManager {
 		for (int i = 0; i < aut2.getEstados().size(); i++) {
 			suma.add(aut2.getEstados().get(i));
 		}
-		/////////////
-		//ESTADOS ALCANZABLES
-		/////////////
 		for (int i = 0; i < suma.size(); i++) {
 			Collections.sort(suma.get(i).getConexiones());
 		}
+		/////////////
+		//ESTADOS ALCANZABLES
+		/////////////
 		///////////////
 		//PARTICION INICIAL
 		while(suma.size()!=0){

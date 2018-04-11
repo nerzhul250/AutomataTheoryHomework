@@ -42,7 +42,7 @@ public class Automata {
 	}
 	public boolean EliminarEstadosNoAlcan() {
 		boolean elimino=false;
-		if(estados.get(0)!=null){			
+		if(estados.get(0)!=null){
 			ArrayList<Integer> ids=estados.get(0).darEstadosAlcansados(new ArrayList<Integer>());
 			ids.sort(new idsComparate());
 			int i=1;
@@ -55,11 +55,9 @@ public class Automata {
 					
 				}else {
 					i++;
-				}
-				
+				}	
 			}
 		}
-		
-			return elimino;
+		return elimino;
 	}
 }
