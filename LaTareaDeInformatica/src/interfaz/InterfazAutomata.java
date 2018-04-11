@@ -81,4 +81,15 @@ public class InterfazAutomata extends JFrame {
 			JOptionPane.showMessageDialog(this,"Te falta algo para completar alguno de los automatas");
 		}
 	}
+	public void DeleteEstadosNoAlc() {
+		// TODO Auto-generated method stub
+		String A;
+		try {
+			A = mundo.DeleteEstadosNoAlcanzables();
+			pda.repaint();
+			JOptionPane.showMessageDialog(this,A);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this,"Te falta algo para completar alguno de los automatas");
+		}
+	}
 }
