@@ -78,4 +78,36 @@ public class Estado {
 	public void setAutomata(int automata) {
 		this.automata = automata;
 	}
+	public int getId() {
+		return id;
+	}
+	public ArrayList<Integer> darEstadosAlcansados(ArrayList<Integer> sal) {
+		// TODO Auto-generated method stub
+		ArrayList<Integer> salida=sal;
+		for (int i = 0; i < estadosAdyacentes.size(); i++) {
+			if(estadosAdyacentes.get(i).getEstadoDes()!=null&&!salida.contains(estadosAdyacentes.get(i).getEstadoDes().id)) {
+				salida.add(estadosAdyacentes.get(i).getEstadoDes().id);
+				salida=estadosAdyacentes.get(i).getEstadoDes().darEstadosAlcansados(salida);
+			}
+		}
+		return salida;
+	}
+	public void EliminarAdyacencias() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < estadosAdyacentes.size();) {
+			int j=0;
+			boolean bandera=false;
+			while(j < estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.size()&&!bandera)
+			{
+				if(estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.get(j).getEstadoOrig().id==id) {
+					estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.remove(j);
+					estadosAdyacentes.remove(i);
+					bandera=true;
+				}
+				j++;
+				
+			}
+		}
+	}
+	
 }

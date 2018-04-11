@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Conexion implements Comparable<Conexion>{
 	private String simboloSalida;//Por si es automata de mealy
 	private String simboloEntrada;
-	
+	//Origen
 	private Estado estadoOrg;
+	//Destino
 	private Estado estadoDes;
 	
 	private ArrayList<int[]> camino;
@@ -23,6 +24,9 @@ public class Conexion implements Comparable<Conexion>{
 		estadoOrg=estor;
 		estadoDes=des;
 		this.simboloEntrada=simboloEntrada;
+	}
+	public Estado getEstadoOrig() {
+		return estadoOrg;
 	}
 	public String getSimboloSalida() {
 		return simboloSalida;

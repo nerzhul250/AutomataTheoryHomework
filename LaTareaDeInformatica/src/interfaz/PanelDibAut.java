@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -59,6 +60,19 @@ public class PanelDibAut extends JPanel implements MouseListener{
 			}
 			g2d.setColor(Color.BLACK);
 			g2d.fillOval((int)(posx-mundo.estadoRadio),(int)(posy-mundo.estadoRadio),(int)mundo.estadoRadio*2,(int)mundo.estadoRadio*2);
+			//Flecha para el estado inicial
+			if(i==0) {				
+				int inicial=60;
+				int inicialFlehca=30;
+				g2d.fillRect(posx-inicial, posy-3,(int) (inicial-mundo.estadoRadio),6);
+				int[] f0x={posx-inicialFlehca,posx-inicialFlehca-10,posx-inicialFlehca-20,posx-inicialFlehca-20};
+				int[] f0y= {posy-3,posy-3,posy-13,posy-23};
+				int[] f1x={posx-inicialFlehca,posx-inicialFlehca-10,posx-inicialFlehca-20,posx-inicialFlehca-20};
+				int[] f1y= {posy+3,posy+3,posy+13,posy+23};
+				g2d.fillPolygon(f1x, f1y, 4);
+				g2d.fillPolygon(f0x,f0y,4);
+			}
+				
 			g2d.setColor(Color.WHITE);
 			String B="";
 			if(!mundo.getAutomataActual().getEstados().get(i).getSimboloSalida().isEmpty()){

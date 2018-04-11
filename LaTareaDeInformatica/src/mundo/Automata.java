@@ -1,6 +1,9 @@
 package mundo;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class Automata {
 	
@@ -36,5 +39,27 @@ public class Automata {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	public boolean EliminarEstadosNoAlcan() {
+		boolean elimino=false;
+		if(estados.get(0)!=null){			
+			ArrayList<Integer> ids=estados.get(0).darEstadosAlcansados(new ArrayList<Integer>());
+			ids.sort(new idsComparate());
+			int i=1;
+			while(i<estados.size())
+			{
+				if(!ids.contains(estados.get(i).getId())) {
+					estados.get(i).EliminarAdyacencias();
+					estados.remove(i);
+					elimino=true;
+					
+				}else {
+					i++;
+				}
+				
+			}
+		}
+		
+			return elimino;
 	}
 }
