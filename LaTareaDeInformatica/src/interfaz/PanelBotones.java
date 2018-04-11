@@ -13,17 +13,19 @@ public class PanelBotones extends JPanel implements ActionListener{
 	public final static String SELECCION="SELECCION";
 	public final static String ESTADONORMAL="ESTADONORMAL";
 	public final static String EQUIVALENCIA="EQUIV";
+	public final static String ELIMINARNOALCAZABLES="DELETENOALCA";
 	
 	private JButton butSeleccion;
 	private JButton butEstadoNor;
 	private JButton butDetermEquiv;
+	private JButton butDelteNoAlc;
 	
 	private InterfazAutomata principal;
 	
 	public PanelBotones(InterfazAutomata v){
 		principal=v;
 		
-		setLayout(new GridLayout(3,1));
+		setLayout(new GridLayout(4,1));
 		
 		butSeleccion=new JButton("Accion: Seleccionando");
 		butSeleccion.addActionListener(this);
@@ -38,7 +40,11 @@ public class PanelBotones extends JPanel implements ActionListener{
 		butDetermEquiv.addActionListener(this);
 		butDetermEquiv.setActionCommand(EQUIVALENCIA);
 		
+		butDelteNoAlc=new JButton("Eliminar Estados no alcanzables");
+		butDelteNoAlc.addActionListener(this);;
+		butDelteNoAlc.setActionCommand(ELIMINARNOALCAZABLES);
 		
+		add(butDelteNoAlc);
 		add(butSeleccion);
 		add(butEstadoNor);
 		add(butDetermEquiv);
@@ -51,6 +57,8 @@ public class PanelBotones extends JPanel implements ActionListener{
 			principal.cambiarEstadoUsuario(EstadoUsuario.CREANDOESTADOS);
 		}else if(command.equals(EQUIVALENCIA)){
 			principal.detEquivalencia();
+		}else if(command.equals(ELIMINARNOALCAZABLES)){
+			principal.DeleteEstadosNoAlc();
 		}
 	}
 }

@@ -424,4 +424,17 @@ public class AutomataManager {
 	public int getMealyMoore() {
 		return mealyMoore;
 	}
+	public String DeleteEstadosNoAlcanzables() throws Exception {
+		// TODO Auto-generated method stub
+		if(automataActual!=null&&automataActual.getEstados()!=null&&automataActual.getEstados().size()!=0) {
+			boolean resultado=automataActual.EliminarEstadosNoAlcan();
+			if(resultado)
+				return ("Se Han Eliminado Los Estados No Alcanzables");
+			else
+				return ("No Se Ha podido Eliminar Ningun Estado");
+		}else {
+			throw new Exception();
+		}
+		
+	}
 }

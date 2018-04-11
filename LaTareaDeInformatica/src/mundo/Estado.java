@@ -95,18 +95,22 @@ public class Estado {
 	public void EliminarAdyacencias() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < estadosAdyacentes.size();) {
-			int j=0;
-			boolean bandera=false;
-			while(j < estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.size()&&!bandera)
-			{
-				if(estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.get(j).getEstadoOrig().id==id) {
-					estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.remove(j);
-					estadosAdyacentes.remove(i);
-					bandera=true;
-				}
-				j++;
-				
-			}
+			
+			estadosAdyacentes.remove(i);
+			
+			//Esto que esta comentado es para eliminar si las conexiones estaban duplicadas
+//			int j=0;
+//			boolean bandera=false;
+//			while(j < estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.size()&&!bandera)
+//			{
+//				if(estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.get(j).getEstadoOrig().id==id) {
+//					estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.remove(j);
+//					estadosAdyacentes.remove(i);
+//					bandera=true;
+//				}
+//				j++;
+//				
+//			}
 		}
 	}
 	
