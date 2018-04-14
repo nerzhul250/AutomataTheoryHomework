@@ -16,10 +16,17 @@ public class Estado {
 	
 	private ArrayList<Conexion> estadosAdyacentes;
 	
+	public String[] getSimbolosEntradaUsados() {
+		return simbolosEntradaUsados;
+	}
+	public void setSimbolosEntradaUsados(String[] simbolosEntradaUsados) {
+		this.simbolosEntradaUsados = simbolosEntradaUsados;
+	}
 	public Estado(int posj,int posi,int id,int aut,String[] simbolosEntrada){
 		automata=aut;
 		this.posi=posi;
 		this.posj=posj;
+		
 		this.id=id;
 		simbolosEntradaNoUsados=simbolosEntrada;
 		simbolosEntradaUsados=new String[simbolosEntrada.length];
@@ -81,17 +88,26 @@ public class Estado {
 	public int getId() {
 		return id;
 	}
-	public ArrayList<Integer> darEstadosAlcansados(ArrayList<Integer> sal) {
-		// TODO Auto-generated method stub
-		ArrayList<Integer> salida=sal;
+	
+	public void darEstadosAlcansados(ArrayList<Integer> sal) {
+		sal.add(this.id);
 		for (int i = 0; i < estadosAdyacentes.size(); i++) {
-			if(estadosAdyacentes.get(i).getEstadoDes()!=null&&!salida.contains(estadosAdyacentes.get(i).getEstadoDes().id)) {
-				salida.add(estadosAdyacentes.get(i).getEstadoDes().id);
-				salida=estadosAdyacentes.get(i).getEstadoDes().darEstadosAlcansados(salida);
+			if(!sal.contains(estadosAdyacentes.get(i).getEstadoDes().id)) {
+				estadosAdyacentes.get(i).getEstadoDes().darEstadosAlcansados(sal);
 			}
 		}
-		return salida;
 	}
+
+	protected Object clone() {
+		Estado es=new Estado(posj, posi, id, automata,simbolosEntradaNoUsados);
+		es.setSimbolosEntradaUsados(simbolosEntradaUsados);
+		return es;
+	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		Estado e=(Estado)obj;
+//		return e.getId()*e.automata==getId()*automata;
+//	}
 	public void EliminarAdyacencias() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < estadosAdyacentes.size();) {

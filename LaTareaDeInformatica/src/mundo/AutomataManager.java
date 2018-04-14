@@ -79,16 +79,17 @@ public class AutomataManager {
 	public void eventoUsuario(int x, int y) throws Exception {
 		if(eu.equals(EstadoUsuario.CREANDOESTADOS)){
 			if(automataActual.buscarEstadoEnRango(x, y)!=-1)throw new Exception("Posicionamiento invalido");
-			int q=automataActual.getEstados().size()+1;
-			automataActual.getEstados().add(new Estado(x, y, q,automataActual.getId(), conjuntoSimbolosEntrada));
+			int q=automataActual.getEstados().size();
+			automataActual.modificarEstado(new Estado(x, y, q,automataActual.getId(), conjuntoSimbolosEntrada),-1,null);
 		}else if(eu.equals(EstadoUsuario.SELECCIONANDO)){
 			int estadoSel=automataActual.buscarEstadoEnRango(x,y);
-			estadoSeleccionadoActual=estadoSel;
+			if(estadoSel!=-1) {
+				estadoSeleccionadoActual=estadoSel;				
+			}
 		}else if(eu.equals(EstadoUsuario.CONECTANDO)){
 			int estadoSel=automataActual.buscarEstadoEnRango(x,y);
-			if(simboloEntradaActual!=null && estadoSel!=-1 &&
+			if(simboloEntradaActual!=null && estadoSel!=-1 && estadoSeleccionadoActual!=-1 &&
 					automataActual.getEstados().get(estadoSeleccionadoActual).getSimbolosEntradaNoUsados().length!=0){
-				automataActual.getEstados().get(estadoSeleccionadoActual).removerSimbolo(simboloEntradaActual);
 				Conexion con=null;
 				if(mealyMoore==MEALY){
 					con=new Conexion(simboloSalidaActual,simboloEntradaActual,
@@ -100,9 +101,10 @@ public class AutomataManager {
 							automataActual.getEstados().get(estadoSel));
 				}
 				ArrayList<int[]>cam=encontrarCaminoEntreEstados(estadoSeleccionadoActual,estadoSel);
-				if(cam.size()==0){throw new Exception("Reinicie el programa");}
+				if(cam.size()==0){throw new Exception("Retroceda el programa");}
 				con.setCamino(cam);
-				automataActual.getEstados().get(estadoSeleccionadoActual).getConexiones().add(con);
+				automataActual.modificarEstado(null,estadoSeleccionadoActual,con);
+				automataActual.getEstados().get(estadoSeleccionadoActual).removerSimbolo(simboloEntradaActual);
 				simboloEntradaActual=null;
 			}
 		}
@@ -261,6 +263,11 @@ public class AutomataManager {
 	 */
 	public String sonEquivalentes() throws Exception {
 		if(!verificarAutomatas()){throw new Exception("NO");}
+		/////////////
+		//QUITAR ESTADOS NO ALCANZABLES
+		aut1.EliminarEstadosNoAlcan();
+		aut2.EliminarEstadosNoAlcan();
+		/////////////
 		HashMap<Estado,Integer> P=new HashMap<Estado,Integer>();
 		ArrayList<ArrayList<Estado>> M=new ArrayList<ArrayList<Estado>>();
 		ArrayList<Estado>suma=new ArrayList<Estado>();
@@ -275,9 +282,6 @@ public class AutomataManager {
 		for (int i = 0; i < suma.size(); i++) {
 			Collections.sort(suma.get(i).getConexiones());
 		}
-		/////////////
-		//ESTADOS ALCANZABLES
-		/////////////
 		///////////////
 		//PARTICION INICIAL
 		while(suma.size()!=0){
@@ -318,7 +322,7 @@ public class AutomataManager {
 			}
 		}while(M1.size()!=M.size());
 		//HASTA QUE PK+1=PK
-		//SE DECIDE SI SON EQUIVALENTES SI HAY AUT1 Y AUT2 EN CADA UNO DE LOS SUBCONJUNTOS PK
+		//SE DECIDE SI SON EQUIVALENTES SI HAY ESTADOS DE AUT1 Y AUT2 EN CADA UNO DE LOS SUBCONJUNTOS PK
 		for (int i = 0; i < M.size(); i++) {
 			boolean aut1=false;
 			boolean aut2=false;
@@ -334,6 +338,33 @@ public class AutomataManager {
 			}
 		}
 		return "Son equivalentes!";
+	}
+	private void particionar(ArrayList<Estado> partir,
+			ArrayList<ArrayList<Estado>> m, HashMap<Estado, Integer> p,
+			HashMap<Estado, Integer> p1) {
+		while(partir.size()!=0){
+			ArrayList<Estado>s1=new ArrayList<Estado>();
+			s1.add(partir.get(0));
+			m.add(s1);
+			p.put(partir.get(0),m.size()-1);
+			for (int i = 1; i < partir.size(); i++) {
+				boolean safe=true;
+				for (int j = 0; j < partir.get(0).getConexiones().size() && safe; j++) {
+					Estado q1=partir.get(0).getConexiones().get(j).getEstadoDes();
+					Estado q2=partir.get(i).getConexiones().get(j).getEstadoDes();
+					if(p1.get(q1)!=p1.get(q2)){
+						safe=false;
+					}
+				}
+				if(safe){
+					s1.add(partir.get(i));
+					p.put(partir.get(i),m.size()-1);
+					partir.remove(i);
+					i--;
+				}
+			}
+			partir.remove(0);
+		}
 	}
 	/**
 	 * Metodo para verificar que los dos automatas esten completos
@@ -378,33 +409,6 @@ public class AutomataManager {
 	private boolean estadosEquivalentesMoore(Estado q1, Estado q2) {
 		return q1.getSimboloSalida().equals(q2.getSimboloSalida());
 	}
-	private void particionar(ArrayList<Estado> partir,
-			ArrayList<ArrayList<Estado>> m, HashMap<Estado, Integer> p,
-			HashMap<Estado, Integer> p1) {
-		while(partir.size()!=0){
-			ArrayList<Estado>s1=new ArrayList<Estado>();
-			s1.add(partir.get(0));
-			m.add(s1);
-			p.put(partir.get(0),m.size()-1);
-			for (int i = 1; i < partir.size(); i++) {
-				boolean safe=true;
-				for (int j = 0; j < partir.get(0).getConexiones().size() && safe; j++) {
-					Estado q1=partir.get(0).getConexiones().get(j).getEstadoDes();
-					Estado q2=partir.get(i).getConexiones().get(j).getEstadoDes();
-					if(p1.get(q1)!=p1.get(q2)){
-						safe=false;
-					}
-				}
-				if(safe){
-					s1.add(partir.get(i));
-					p.put(partir.get(i),m.size()-1);
-					partir.remove(i);
-					i--;
-				}
-			}
-			partir.remove(0);
-		}
-	}
 	////////////////////////////////////////
 	public EstadoUsuario getEu() {
 		return eu;
@@ -436,5 +440,11 @@ public class AutomataManager {
 			throw new Exception();
 		}
 		
+	}
+	public void retroceso() {
+		if(automataActual.getSizeTime()>1) {
+			estadoSeleccionadoActual=-1;
+			automataActual.retroceder();
+		}
 	}
 }

@@ -43,6 +43,7 @@ public class InterfazAutomata extends JFrame {
 		InterfazAutomata ia=new InterfazAutomata();
 		ia.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		ia.setVisible(true);
+		ia.setResizable(false);
 	}
 	public void cambiarEstadoUsuario(EstadoUsuario es) {
 		mundo.cambiarEstadoUsuario(es);
@@ -65,6 +66,7 @@ public class InterfazAutomata extends JFrame {
 			mundo.eventoUsuario(x, y);	
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this,e.getMessage());
+			e.printStackTrace();
 		}
 		int estado=mundo.getEstadoSeleccionadoActual();
 		if(estado!=-1){
@@ -91,5 +93,9 @@ public class InterfazAutomata extends JFrame {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this,"Te falta algo para completar alguno de los automatas");
 		}
+	}
+	public void atras() {
+		mundo.retroceso();
+		pda.repaint();
 	}
 }

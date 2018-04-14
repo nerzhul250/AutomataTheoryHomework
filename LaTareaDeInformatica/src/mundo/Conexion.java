@@ -19,6 +19,15 @@ public class Conexion implements Comparable<Conexion>{
 		estadoOrg=estor;
 		estadoDes=des;
 	}
+	public Estado getEstadoOrg() {
+		return estadoOrg;
+	}
+	public void setEstadoOrg(Estado estadoOrg) {
+		this.estadoOrg = estadoOrg;
+	}
+	public void setEstadoDes(Estado estadoDes) {
+		this.estadoDes = estadoDes;
+	}
 	public Conexion(String simboloEntrada,Estado estor,Estado des){
 		camino=new ArrayList<int[]>();
 		estadoOrg=estor;
