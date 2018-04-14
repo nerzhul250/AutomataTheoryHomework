@@ -19,6 +19,12 @@ public class Conexion implements Comparable<Conexion>{
 		estadoOrg=estor;
 		estadoDes=des;
 	}
+	public Conexion(String simboloEntrada,Estado estor,Estado des){
+		camino=new ArrayList<int[]>();
+		estadoOrg=estor;
+		estadoDes=des;
+		this.simboloEntrada=simboloEntrada;
+	}
 	public Estado getEstadoOrg() {
 		return estadoOrg;
 	}
@@ -27,12 +33,6 @@ public class Conexion implements Comparable<Conexion>{
 	}
 	public void setEstadoDes(Estado estadoDes) {
 		this.estadoDes = estadoDes;
-	}
-	public Conexion(String simboloEntrada,Estado estor,Estado des){
-		camino=new ArrayList<int[]>();
-		estadoOrg=estor;
-		estadoDes=des;
-		this.simboloEntrada=simboloEntrada;
 	}
 	public Estado getEstadoOrig() {
 		return estadoOrg;

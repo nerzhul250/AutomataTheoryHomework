@@ -52,10 +52,18 @@ public class AutomataManager {
 			simboloSalidaActual=conjuntoSimbolosSalida[0];
 		}
 	}
+	/**
+	 * Actualiza el simbolo de entrada actual
+	 * @param entr
+	 */
 	public void actSimbEntrada(String entr){
 		eu=EstadoUsuario.CONECTANDO;
 		simboloEntradaActual=entr;
 	}
+	/**
+	 * Actualiza el simbolo de salida actual
+	 * @param sali
+	 */
 	public void actSimbSalida(String sali) {
 		if(eu.equals(EstadoUsuario.SELECCIONANDO) && estadoSeleccionadoActual!=-1 && mealyMoore==MOORE){
 			automataActual.getEstados().get(estadoSeleccionadoActual).setSimboloSalida(sali);
@@ -68,6 +76,10 @@ public class AutomataManager {
 	public void cambiarEstadoUsuario(EstadoUsuario es) {
 		eu=es;
 	}
+	/**
+	 * Cambia el automata mostrado por pantalla
+	 * @param item
+	 */
 	public void cambiarAutomata(Integer item) {
 		estadoSeleccionadoActual=-1;
 		if(item==1){
@@ -76,6 +88,13 @@ public class AutomataManager {
 			automataActual=aut2;
 		}
 	}
+	/**
+	 * Metodo que maneja los eventos de usuario de acuerdo
+	 * al estado actual de este.
+	 * @param x
+	 * @param y
+	 * @throws Exception
+	 */
 	public void eventoUsuario(int x, int y) throws Exception {
 		if(eu.equals(EstadoUsuario.CREANDOESTADOS)){
 			if(automataActual.buscarEstadoEnRango(x, y)!=-1)throw new Exception("Posicionamiento invalido");
@@ -111,6 +130,7 @@ public class AutomataManager {
 	}
 	/////////////////////////////////////////////
 	//CAMINOS ENTRE AUTOMATAS EN EL DIBUJO
+	////////////////////////////////////////////
 	/**
 	 * Retorna la serie de casillas que se deben de recorrer en la matriz de dibujo para ir del 
 	 * estado origen al estado destino
@@ -211,7 +231,6 @@ public class AutomataManager {
 		return bfs(matrix,j,j2);
 	}
 	/**
-	 * 
 	 * @param matrix la matriz de dibujo
 	 * @param j componente x de la posicion donde inicia el bfs
 	 * @param j2 componente y de la posicion donde inicia el bfs
@@ -254,6 +273,7 @@ public class AutomataManager {
 	}
 	/////////////////////////////////////////////
 	//EQUIVALENCIA ENTRE AUTOMATAS
+	/////////////////////////////////////////////
 	/**
 	 * Retorna un string con valor:
 	 * Son equivalentes! si los automatas son equivalentes
@@ -268,6 +288,7 @@ public class AutomataManager {
 		aut1.EliminarEstadosNoAlcan();
 		aut2.EliminarEstadosNoAlcan();
 		/////////////
+		//INICIALIZANDO CONJUNTOS...
 		HashMap<Estado,Integer> P=new HashMap<Estado,Integer>();
 		ArrayList<ArrayList<Estado>> M=new ArrayList<ArrayList<Estado>>();
 		ArrayList<Estado>suma=new ArrayList<Estado>();
@@ -279,11 +300,15 @@ public class AutomataManager {
 		for (int i = 0; i < aut2.getEstados().size(); i++) {
 			suma.add(aut2.getEstados().get(i));
 		}
+		///////////////
+		///////////////
+		//Se ordenan las conexiones para facilitar la generacion de las particiones
 		for (int i = 0; i < suma.size(); i++) {
 			Collections.sort(suma.get(i).getConexiones());
 		}
 		///////////////
 		//PARTICION INICIAL
+		//SE GENERA LA PARTICION INICIAL
 		while(suma.size()!=0){
 			ArrayList<Estado>s1=new ArrayList<Estado>();
 			s1.add(suma.get(0));
@@ -339,6 +364,14 @@ public class AutomataManager {
 		}
 		return "Son equivalentes!";
 	}
+	/**
+	 * Subrutina de la determinacion de equivalencia, se encarga de partir
+	 * subconjuntos de P_K
+	 * @param partir
+	 * @param m
+	 * @param p
+	 * @param p1
+	 */
 	private void particionar(ArrayList<Estado> partir,
 			ArrayList<ArrayList<Estado>> m, HashMap<Estado, Integer> p,
 			HashMap<Estado, Integer> p1) {
@@ -428,6 +461,11 @@ public class AutomataManager {
 	public int getMealyMoore() {
 		return mealyMoore;
 	}
+	/**
+	 * Metodo que elimina estados no alcanzables
+	 * @return
+	 * @throws Exception
+	 */
 	public String DeleteEstadosNoAlcanzables() throws Exception {
 		// TODO Auto-generated method stub
 		if(automataActual!=null&&automataActual.getEstados()!=null&&automataActual.getEstados().size()!=0) {

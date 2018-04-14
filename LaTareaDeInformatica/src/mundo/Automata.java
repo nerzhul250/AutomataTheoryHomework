@@ -18,6 +18,10 @@ public class Automata {
 	public int getSizeTime() {
 		return estados.size();
 	}
+	/**
+	 * Este metodo retorna el id del estado seleccionado por el usuario, si ninguno esta
+	 * dentro del rango retorna -1
+	 */
 	public int buscarEstadoEnRango(int x, int y) {
 		for (int i = 0; i < estados.get(0).size(); i++) {
 			int posx=estados.get(0).get(i).getPosj();
@@ -29,15 +33,10 @@ public class Automata {
 		}
 		return -1;
 	}
-	public ArrayList<Estado> getEstados() {
-		return estados.get(0);
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	/**
+	 * Este metodo elimina los estados no alcanzables
+	 * @return
+	 */
 	public boolean EliminarEstadosNoAlcan() {
 		boolean elimino=false;
 		if(estados.get(0).get(0)!=null){
@@ -55,7 +54,16 @@ public class Automata {
 		}
 		return elimino;
 	}
-
+	/**
+	 * Este metodo tiene dos propositos:
+	 * agregar un nuevo estado
+	 * agregar una nueva conexion
+	 * Se agregan de tal manera que se genere una nueva lista
+	 * de estados por cada modificacion
+	 * @param es
+	 * @param iEs
+	 * @param con
+	 */
 	public void modificarEstado(Estado es, int iEs, Conexion con) {
 		ArrayList<Estado>nuevos=new ArrayList<Estado>();
 		for (int i = 0; i <estados.get(0).size(); i++) {
@@ -79,6 +87,15 @@ public class Automata {
 			nuevos.add(es);
 			estados.add(0,nuevos);
 		}
+	}
+	public ArrayList<Estado> getEstados() {
+		return estados.get(0);
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public void retroceder() {
 		estados.remove(0);

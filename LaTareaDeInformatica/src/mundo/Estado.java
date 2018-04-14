@@ -16,12 +16,6 @@ public class Estado {
 	
 	private ArrayList<Conexion> estadosAdyacentes;
 	
-	public String[] getSimbolosEntradaUsados() {
-		return simbolosEntradaUsados;
-	}
-	public void setSimbolosEntradaUsados(String[] simbolosEntradaUsados) {
-		this.simbolosEntradaUsados = simbolosEntradaUsados;
-	}
 	public Estado(int posj,int posi,int id,int aut,String[] simbolosEntrada){
 		automata=aut;
 		this.posi=posi;
@@ -33,6 +27,10 @@ public class Estado {
 		estadosAdyacentes=new ArrayList<Conexion>();
 		simboloSalida="";
 	}
+	/**
+	 * Remueve uno de los simbolos de entradas disponibles del estado
+	 * @param simboloEntrada
+	 */
 	public void removerSimbolo(String simboloEntrada) {
 		String[] naw1=new String[simbolosEntradaNoUsados.length-1];
 		String[] naw2=new String[simbolosEntradaUsados.length+1];
@@ -51,6 +49,18 @@ public class Estado {
 		naw2[k]=simboloEntrada;
 		simbolosEntradaNoUsados=naw1;
 		simbolosEntradaUsados=naw2;
+	}
+	/**
+	 * Da los estados alcanzables desde este estado
+	 * @param sal
+	 */
+	public void darEstadosAlcansados(ArrayList<Integer> sal) {
+		sal.add(this.id);
+		for (int i = 0; i < estadosAdyacentes.size(); i++) {
+			if(!sal.contains(estadosAdyacentes.get(i).getEstadoDes().id)) {
+				estadosAdyacentes.get(i).getEstadoDes().darEstadosAlcansados(sal);
+			}
+		}
 	}
 	public String getSimboloSalida() {
 		return simboloSalida;
@@ -88,46 +98,16 @@ public class Estado {
 	public int getId() {
 		return id;
 	}
-	
-	public void darEstadosAlcansados(ArrayList<Integer> sal) {
-		sal.add(this.id);
-		for (int i = 0; i < estadosAdyacentes.size(); i++) {
-			if(!sal.contains(estadosAdyacentes.get(i).getEstadoDes().id)) {
-				estadosAdyacentes.get(i).getEstadoDes().darEstadosAlcansados(sal);
-			}
-		}
-	}
 
 	protected Object clone() {
 		Estado es=new Estado(posj, posi, id, automata,simbolosEntradaNoUsados);
 		es.setSimbolosEntradaUsados(simbolosEntradaUsados);
 		return es;
 	}
-//	@Override
-//	public boolean equals(Object obj) {
-//		Estado e=(Estado)obj;
-//		return e.getId()*e.automata==getId()*automata;
-//	}
-	public void EliminarAdyacencias() {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < estadosAdyacentes.size();) {
-			
-			estadosAdyacentes.remove(i);
-			
-			//Esto que esta comentado es para eliminar si las conexiones estaban duplicadas
-//			int j=0;
-//			boolean bandera=false;
-//			while(j < estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.size()&&!bandera)
-//			{
-//				if(estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.get(j).getEstadoOrig().id==id) {
-//					estadosAdyacentes.get(i).getEstadoDes().estadosAdyacentes.remove(j);
-//					estadosAdyacentes.remove(i);
-//					bandera=true;
-//				}
-//				j++;
-//				
-//			}
-		}
+	public String[] getSimbolosEntradaUsados() {
+		return simbolosEntradaUsados;
 	}
-	
+	public void setSimbolosEntradaUsados(String[] simbolosEntradaUsados) {
+		this.simbolosEntradaUsados = simbolosEntradaUsados;
+	}
 }
