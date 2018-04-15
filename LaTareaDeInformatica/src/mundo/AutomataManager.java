@@ -442,7 +442,8 @@ public class AutomataManager {
 	private boolean estadosEquivalentesMoore(Estado q1, Estado q2) {
 		return q1.getSimboloSalida().equals(q2.getSimboloSalida());
 	}
-	////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////
 	public EstadoUsuario getEu() {
 		return eu;
 	}
